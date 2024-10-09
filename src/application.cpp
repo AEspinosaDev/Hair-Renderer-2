@@ -58,7 +58,9 @@ void HairViewer::setup()
 
     Mesh *hair = new Mesh();
     hair->load_file(MESH_PATH + "curly.hair", false);
-    hair->set_material(new HairMaterial());
+    HairMaterial* hmat = new HairMaterial(); 
+    hmat->set_base_color(Vec3{0.21f,0.13f,0.067f});
+    hair->set_material(hmat);
     hair->set_rotation({-90.0, 0.0f, 90.0f});
     hair->set_name("Hair");
     hair->set_scale(0.053f);
@@ -68,6 +70,9 @@ void HairViewer::setup()
     head->set_rotation({0.0, 270.0f, 180.0f});
     head->load_file(MESH_PATH + "woman.ply");
     auto headMat = new PhysicallyBasedMaterial();
+    headMat->set_albedo(Vec3{0.21f,0.18f,0.085f});
+    headMat->set_metalness(0.1f);
+    headMat->set_roughness(0.65f);
     head->set_material(headMat);
     head->set_name("Head");
     m_scene->add(head);
