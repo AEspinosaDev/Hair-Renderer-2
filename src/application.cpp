@@ -7,15 +7,14 @@ void HairViewer::init(RendererSettings settings)
 
     m_window->init();
 
-    m_window->set_window_size_callback(std::bind(&HairViewer::window_resize_callback, this, std::placeholders::_1,
-                                                 std::placeholders::_2));
-    m_window->set_mouse_callback(std::bind(&HairViewer::mouse_callback, this, std::placeholders::_1,
-                                           std::placeholders::_2));
+    m_window->set_window_size_callback(
+        std::bind(&HairViewer::window_resize_callback, this, std::placeholders::_1, std::placeholders::_2));
+    m_window->set_mouse_callback(
+        std::bind(&HairViewer::mouse_callback, this, std::placeholders::_1, std::placeholders::_2));
     m_window->set_key_callback(std::bind(&HairViewer::keyboard_callback, this, std::placeholders::_1,
-                                         std::placeholders::_2, std::placeholders::_3,
-                                         std::placeholders::_4));
+                                         std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
-    m_renderer = new Renderer(m_window, settings);
+    m_renderer = new ForwardRenderer(m_window, settings, {HIGH, false});
 
     setup();
 

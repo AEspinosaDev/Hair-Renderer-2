@@ -8,11 +8,11 @@ int main(int argc, char *argv[])
     try
     {
         RendererSettings settings{};
-        settings.AAtype = AntialiasingType::MSAA_x8;
+        settings.samplesMSAA = MSAASamples::MSAA_x8;
         settings.clearColor = Vec4(0.02, 0.02, 0.02, 1.0);
         settings.enableUI = true;
-        settings.renderingType = RendererType::TFORWARD;
-        settings.shadowResolution = ShadowResolution::MEDIUM;
+        // settings.renderingType = RendererType::TFORWARD;
+        // settings.shadowResolution = ShadowResolution::MEDIUM;
 
         if (argc == 1)
             std::cout << "No arguments submitted, initializing with default parameters..." << std::endl;
@@ -33,13 +33,13 @@ int main(int argc, char *argv[])
 
                 if (type == "forward")
                 {
-                    settings.renderingType = RendererType::TFORWARD;
+                    // settings.renderingType = RendererType::TFORWARD;
                     i++;
                     continue;
                 }
                 if (type == "deferred")
                 {
-                    settings.renderingType = RendererType::TDEFERRED;
+                    // settings.renderingType = RendererType::TDEFERRED;
                     i++;
                     continue;
                 }
@@ -62,13 +62,13 @@ int main(int argc, char *argv[])
                 }
                 std::string aaType(argv[i + 1]);
                 if (aaType == "none")
-                    settings.AAtype = AntialiasingType::_NONE;
+                    settings.samplesMSAA = MSAASamples::_NONE;
                 if (aaType == "msaa4")
-                    settings.AAtype = AntialiasingType::MSAA_x4;
+                    settings.samplesMSAA = MSAASamples::MSAA_x4;
                 if (aaType == "msaa8")
-                    settings.AAtype = AntialiasingType::MSAA_x8;
-                if (aaType == "fxaa")
-                    settings.AAtype = AntialiasingType::FXAA;
+                    settings.samplesMSAA = MSAASamples::MSAA_x8;
+                // if (aaType == "fxaa"){}
+                //     settings.AAtype = AntialiasingType::FXAA;
 
                 i++;
                 continue;
