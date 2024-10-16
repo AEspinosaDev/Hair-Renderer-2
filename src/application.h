@@ -5,8 +5,10 @@
 
 #include <engine/core.h>
 #include <engine/utilities/controller.h>
+#include <optick.h>
 
 #include "gui.h"
+#include "hair_loader.h"
 
 USING_VULKAN_ENGINE_NAMESPACE
 
@@ -21,7 +23,6 @@ class HairViewer
     Camera *camera;
     Controller *m_controller;
 
-    Mesh *m_lightDummy;
     bool animateLight{true};
 
     struct Time

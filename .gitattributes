@@ -1,0 +1,2 @@
+resources/models/neural_hair_ALVARO.ply filter=lfs diff=lfs merge=lfs -text
+resources/models/neural_head_ALVARO.ply filter=lfs diff=lfs merge=lfs -text

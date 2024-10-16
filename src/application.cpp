@@ -1,6 +1,8 @@
 #include "application.h"
 #include <filesystem>
 
+#define USE_NEURAL_MODELS
+
 void HairViewer::init(RendererSettings settings)
 {
     m_window = new Window("VK Engine", 1280, 1024);
@@ -51,33 +53,64 @@ void HairViewer::setup()
 
     m_scene = new Scene(camera);
 
-    m_scene->add(new PointLight());
-    m_scene->get_lights()[0]->set_position({-3.0f, 3.0f, 0.0f});
-    m_scene->get_lights()[0]->set_shadow_fov(115.0f);
-    m_scene->get_lights()[0]->set_name("PointLight");
+    PointLight *light = new PointLight();
+    light->set_position({-6.0f, 6.0f, 0.0f});
+    light->set_shadow_fov(90.0f);
+    light->set_shadow_bias(0.00005f);
+    light->set_shadow_near(0.1f);
+    light->set_area_of_effect(30.0f);
+    light->set_name("PointLight");
+
+    Mesh *lightDummy = new Mesh();
+    lightDummy->load_file(ENGINE_MESH_PATH + "sphere.obj", false);
+    lightDummy->set_material(new UnlitMaterial());
+    lightDummy->set_cast_shadows(false);
+    lightDummy->set_name("LightDummy");
+    light->add_child(lightDummy);
+
+    m_scene->add(light);
 
     Mesh *hair = new Mesh();
+#ifdef USE_NEURAL_MODELS
+    std::thread loadThread1(hair_loaders::load_neural_hair, hair, RESOURCES_PATH "models/neural_hair_ALVARO.ply",
+                            nullptr, true, false, false, false);
+    loadThread1.detach();
+    // hair_loaders::load_neural_hair( hair, RESOURCES_PATH "models/neural_hair_ALVARO.ply",
+    //                         nullptr, true, false, false, false);
+    hair->set_scale(3.f);
+    hair->set_rotation({-90.0, 0.0f, 215.0f});
+#else
     hair->load_file(MESH_PATH + "curly.hair", false);
-    HairMaterial* hmat = new HairMaterial(); 
-    hmat->set_base_color(Vec3{0.21f,0.13f,0.067f});
-    hair->set_material(hmat);
-    hair->set_rotation({-90.0, 0.0f, 90.0f});
-    hair->set_name("Hair");
     hair->set_scale(0.053f);
+    hair->set_rotation({-90.0, 0.0f, 90.0f});
+#endif
+    HairMaterial *hmat = new HairMaterial();
+    hmat->set_base_color(Vec3{0.21f, 0.13f, 0.067f});
+    hair->set_material(hmat);
+    hair->set_name("Hair");
     m_scene->add(hair);
 
+
+
     Mesh *head = new Mesh();
-    head->set_rotation({0.0, 270.0f, 180.0f});
+#ifdef USE_NEURAL_MODELS
+    head->load_file(MESH_PATH + "neural_head_ALVARO.ply");
+    head->set_scale(3.f);
+    head->set_rotation({-90.0, 0.0f, 215.0f});
+#else
     head->load_file(MESH_PATH + "woman.ply");
+    head->set_rotation({0.0, 270.0f, 180.0f});
+#endif
     auto headMat = new PhysicallyBasedMaterial();
-    headMat->set_albedo(Vec3{0.21f,0.18f,0.085f});
-    headMat->set_metalness(0.1f);
-    headMat->set_roughness(0.65f);
+    headMat->set_albedo(Vec3{0.21f, 0.18f, 0.085f});
+    headMat->set_metalness(0.0f);
+    headMat->set_roughness(0.4f);
     head->set_material(headMat);
     head->set_name("Head");
     m_scene->add(head);
 
-    m_scene->set_ambient_color({0.2, 0.25, 0.61});
+    m_scene->set_ambient_color({0.2, 0.2, 0.2});
+    m_scene->set_ambient_intensity(0.0f);
 
     m_controller = new Controller(camera);
 }
@@ -96,9 +129,9 @@ void HairViewer::update()
         float _z = light->get_position().x * sin(rotationAngle) + light->get_position().z * cos(rotationAngle);
 
         light->set_position({_x, light->get_position().y, _z});
+        static_cast<UnlitMaterial *>(static_cast<Mesh *>(light->get_children().front())->get_material(0))
+            ->set_color({light->get_color(), 1.0f});
     }
-    // m_lightDummy->set_position(light->get_position());
-    // dynamic_cast<UnlitMaterial *>(m_lightDummy->get_material())->set_color(glm::vec4(light->get_color(), 1.0f));
 
     m_interface.objectWidget->set_object(m_interface.sceneWidget->get_selected_object());
 }
