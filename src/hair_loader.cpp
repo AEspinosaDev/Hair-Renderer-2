@@ -10,8 +10,8 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
     {
         if (preload)
         {
-            byte_buffer = utils::read_file_binary(filePath);
-            file_stream.reset(new utils::memory_stream((char *)byte_buffer.data(), byte_buffer.size()));
+            byte_buffer = graphics::utils::read_file_binary(filePath);
+            file_stream.reset(new graphics::utils::memory_stream((char *)byte_buffer.data(), byte_buffer.size()));
         }
         else
         {
@@ -82,7 +82,7 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
                 std::cerr << "tinyply exception: " << e.what() << std::endl;
         }
 
-        utils::ManualTimer readTimer;
+        graphics::utils::ManualTimer readTimer;
         readTimer.start();
         file.read(*file_stream);
         readTimer.stop();
@@ -99,7 +99,7 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
                 std::cout << "\tRead " << normals->count << " total vertex normals " << std::endl;
         }
 
-        std::vector<utils::Vertex> vertices;
+        std::vector<graphics::utils::Vertex> vertices;
         vertices.reserve(positions->count);
         std::vector<unsigned int> indices;
         // std::vector<unsigned int> rootsIndices;
