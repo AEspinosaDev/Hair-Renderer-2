@@ -2,7 +2,7 @@
 
 * Available only on Windows (for now).
 * Marschner fit for shading.
-* Some hair models are created from gaussian haircut
+* Some hair models are created from [Gaussian Haircut](https://github.com/eth-ait/GaussianHaircut).
 
 ## PREQUISITES
 
@@ -23,9 +23,11 @@
    ```
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/09e258fb-77cb-49fd-ad70-4172bc16e26d" alt="image" width="33%"/>
-  <img src="https://github.com/user-attachments/assets/3db8df87-4c9a-4e19-b848-845a50cf2b98" alt="image" width="33%"/>
-  <img src="https://github.com/user-attachments/assets/8135853d-3140-400d-9935-92b1bcec2855" alt="image" width="33%"/>
+  <img src="https://github.com/user-attachments/assets/09e258fb-77cb-49fd-ad70-4172bc16e26d" alt="image" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/3db8df87-4c9a-4e19-b848-845a50cf2b98" alt="image" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/8135853d-3140-400d-9935-92b1bcec2855" alt="image" width="30%"/>
   <img src="https://github.com/user-attachments/assets/4fe23ace-af6f-4d45-94ec-2350b5b65d2e" alt="image" width="100%"/>
   <img src="https://github.com/user-attachments/assets/e4669edb-2a0b-4c37-9736-7540f8c652e6" alt="image" width="100%"/>
+  <img src="https://github.com/user-attachments/assets/4fcbba1b-3c18-4313-9fff-36fcec36d48b" alt="image" width="100%"/>
+   
 </p>
