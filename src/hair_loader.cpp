@@ -72,6 +72,15 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
             if (verbose)
                 std::cerr << "tinyply exception: " << e.what() << std::endl;
         }
+        try
+        {
+            normals = file.request_properties_from_element("vertex", {"normal_x", "normal_y", "normal_z"});
+        }
+        catch (const std::exception &e)
+        {
+            if (verbose)
+                std::cerr << "tinyply exception: " << e.what() << std::endl;
+        }
 
         utils::ManualTimer readTimer;
         readTimer.start();

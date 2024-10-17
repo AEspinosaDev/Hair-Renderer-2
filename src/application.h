@@ -40,6 +40,8 @@ public:
     void run(RendererSettings settings);
 
 private:
+    void load_neural_avatar(const char* hairFile, const char* headFile, const char* objName, Vec3 hairColor, Vec3 position = Vec3(0.0f));
+
     void setup();
 
     void tick();
