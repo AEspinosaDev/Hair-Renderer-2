@@ -4,13 +4,16 @@
 #include <chrono>
 
 #include <engine/core.h>
-#include <engine/utilities/controller.h>
-#include <optick.h>
+#include <engine/systems.h>
+#include <engine/tools/controller.h>
+
 
 #include "gui.h"
 #include "hair_loader.h"
 
 USING_VULKAN_ENGINE_NAMESPACE
+
+using namespace Core;
 
 class HairViewer
 {
@@ -18,7 +21,7 @@ class HairViewer
     UserInterface m_interface{};
 
     Window *m_window;
-    Renderer *m_renderer;
+    Systems::Renderer *m_renderer;
     Scene *m_scene;
     Camera *camera;
     Controller *m_controller;
@@ -35,9 +38,9 @@ class HairViewer
 
 public:
     void
-    init(RendererSettings settings);
+    init(Systems::RendererSettings settings);
 
-    void run(RendererSettings settings);
+    void run(Systems::RendererSettings settings);
 
 private:
     void load_neural_avatar(const char* hairFile, const char* headFile, const char* objName, Vec3 hairColor, Vec3 position = Vec3(0.0f));

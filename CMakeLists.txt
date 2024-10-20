@@ -27,7 +27,7 @@ file(GLOB APP_SOURCES "src/*.cpp")
 file(GLOB APP_HEADERS "src/*.h")
 add_executable(HairViewer ${APP_SOURCES} ${APP_HEADERS})
 
-target_link_libraries(HairViewer PRIVATE VkFW)
+target_link_libraries(HairViewer PRIVATE VulkanEngine)
 
 target_compile_definitions(HairViewer PUBLIC RESOURCES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/resources/")
 

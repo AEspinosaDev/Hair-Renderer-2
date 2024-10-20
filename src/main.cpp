@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     HairViewer app;
     try
     {
-        RendererSettings settings{};
+        Systems::RendererSettings settings{};
         settings.samplesMSAA = MSAASamples::MSAA_x8;
         settings.clearColor = Vec4(0.02, 0.02, 0.02, 1.0);
         settings.enableUI = true;

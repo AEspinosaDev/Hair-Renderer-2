@@ -1,6 +1,6 @@
 #include "gui.h"
 
-void UserInterface::init(Window* window, Scene* scene, Renderer* renderer)
+void UserInterface::init(Core::Window* window, Core::Scene* scene, Systems::Renderer* renderer)
 {
 
     overlay = new GUIOverlay((float)window->get_extent().width, (float)window->get_extent().height, GuiColorProfileType::DARK);

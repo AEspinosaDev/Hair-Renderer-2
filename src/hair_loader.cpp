@@ -1,6 +1,6 @@
 #include "hair_loader.h"
 
-void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh *const skullMesh, bool preload,
+void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName, Core::Mesh *const skullMesh, bool preload,
                                     bool verbose, bool calculateTangents, bool saveOutput)
 {
     std::unique_ptr<std::istream> file_stream;
@@ -10,8 +10,8 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
     {
         if (preload)
         {
-            byte_buffer = graphics::utils::read_file_binary(filePath);
-            file_stream.reset(new graphics::utils::memory_stream((char *)byte_buffer.data(), byte_buffer.size()));
+            byte_buffer = Graphics::utils::read_file_binary(filePath);
+            file_stream.reset(new Graphics::utils::memory_stream((char *)byte_buffer.data(), byte_buffer.size()));
         }
         else
         {
@@ -82,7 +82,7 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
                 std::cerr << "tinyply exception: " << e.what() << std::endl;
         }
 
-        graphics::utils::ManualTimer readTimer;
+        Graphics::utils::ManualTimer readTimer;
         readTimer.start();
         file.read(*file_stream);
         readTimer.stop();
@@ -99,7 +99,7 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
                 std::cout << "\tRead " << normals->count << " total vertex normals " << std::endl;
         }
 
-        std::vector<graphics::utils::Vertex> vertices;
+        std::vector<Graphics::utils::Vertex> vertices;
         vertices.reserve(positions->count);
         std::vector<unsigned int> indices;
         // std::vector<unsigned int> rootsIndices;
@@ -147,7 +147,7 @@ void hair_loaders::load_neural_hair(Mesh *const mesh, const char *fileName, Mesh
             }
         }
 
-        Geometry *g = new Geometry();
+        Core::Geometry *g = new Core::Geometry();
         g->fill(vertices, indices);
         // augmentDensity(g, 80000);
         mesh->set_geometry(g);

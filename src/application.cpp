@@ -3,7 +3,7 @@
 
 #define USE_NEURAL_MODELS
 
-void HairViewer::init(RendererSettings settings)
+void HairViewer::init(Systems::RendererSettings settings)
 {
     m_window = new Window("VK Engine", 1280, 1024);
 
@@ -16,15 +16,15 @@ void HairViewer::init(RendererSettings settings)
     m_window->set_key_callback(std::bind(&HairViewer::keyboard_callback, this, std::placeholders::_1,
                                          std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
-    m_renderer = new ForwardRenderer(m_window, settings, {HIGH, false});
+    m_renderer = new Systems::ForwardRenderer(m_window, settings, {HIGH, false});
 
     setup();
 
     m_interface.init(m_window, m_scene, m_renderer);
-    m_renderer->set_gui_overlay(m_interface.overlay);
+    //m_renderer->set_gui_overlay(m_interface.overlay);
 }
 
-void HairViewer::run(RendererSettings settings)
+void HairViewer::run(Systems::RendererSettings settings)
 {
 
     init(settings);
@@ -62,7 +62,7 @@ void HairViewer::setup()
     light->set_name("PointLight");
 
     Mesh *lightDummy = new Mesh();
-    lightDummy->load_file(ENGINE_MESH_PATH + "sphere.obj", false);
+    Loaders::load_3D_file(lightDummy, ENGINE_MESH_PATH + "sphere.obj", false);
     lightDummy->set_material(new UnlitMaterial());
     lightDummy->set_cast_shadows(false);
     lightDummy->set_name("LightDummy");
@@ -134,6 +134,7 @@ void HairViewer::tick()
 
     update();
 
+    m_interface.overlay->render();
     m_renderer->render(m_scene);
 }
 void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, const char *objName, Vec3 hairColor, Vec3 position)
@@ -151,7 +152,7 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
 
     const std::string HEAD_PATH(headFile);
     Mesh *head = new Mesh();
-    head->load_file(HEAD_PATH);
+    Loaders::load_3D_file(head, HEAD_PATH);
 
     //Transform
     head->set_position(position);

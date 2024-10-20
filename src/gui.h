@@ -1,7 +1,7 @@
 #pragma once
 
-#include <engine/utilities/gui.h>
-#include <engine/utilities/renderer_widget.h>
+#include <engine/tools/gui.h>
+#include <engine/tools/renderer_widget.h>
 USING_VULKAN_ENGINE_NAMESPACE
 
 struct UserInterface
@@ -14,5 +14,5 @@ struct UserInterface
     SceneExplorerWidget *sceneWidget{nullptr};
     ObjectExplorerWidget *objectWidget{nullptr};
 
-    void init(Window* window, Scene* scene, Renderer* renderer);
+    void init(Core::Window* window, Core::Scene* scene, Systems::Renderer* renderer);
 };
