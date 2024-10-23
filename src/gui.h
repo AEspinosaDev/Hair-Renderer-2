@@ -6,13 +6,13 @@ USING_VULKAN_ENGINE_NAMESPACE
 
 struct UserInterface
 {
-    GUIOverlay *overlay{nullptr};
+    Tools::GUIOverlay *overlay{nullptr};
 
-    Panel *explorer{nullptr};
-    Panel *properties{nullptr};
+    Tools::Panel *explorer{nullptr};
+    Tools::Panel *properties{nullptr};
 
-    SceneExplorerWidget *sceneWidget{nullptr};
-    ObjectExplorerWidget *objectWidget{nullptr};
+    Tools::SceneExplorerWidget *sceneWidget{nullptr};
+    Tools::ObjectExplorerWidget *objectWidget{nullptr};
 
-    void init(Core::Window* window, Core::Scene* scene, Systems::Renderer* renderer);
+    void init(Core::WindowBase* window, Core::Scene* scene, Systems::RendererBase* renderer);
 };

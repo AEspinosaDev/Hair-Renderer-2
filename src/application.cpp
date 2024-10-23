@@ -5,7 +5,7 @@
 
 void HairViewer::init(Systems::RendererSettings settings)
 {
-    m_window = new Window("VK Engine", 1280, 1024);
+    m_window = new WindowGLFW("Hair Viewer", 1280, 1024);
 
     m_window->init();
 
@@ -32,7 +32,7 @@ void HairViewer::run(Systems::RendererSettings settings)
     {
 
         // I-O
-        Window::poll_events();
+        m_window->poll_events();
 
         tick();
     }
@@ -62,8 +62,8 @@ void HairViewer::setup()
     light->set_name("PointLight");
 
     Mesh *lightDummy = new Mesh();
-    Loaders::load_3D_file(lightDummy, ENGINE_MESH_PATH + "sphere.obj", false);
-    lightDummy->set_material(new UnlitMaterial());
+    Tools::Loaders::load_3D_file(lightDummy, ENGINE_MESH_PATH + "sphere.obj", false);
+    lightDummy->push_material(new UnlitMaterial());
     lightDummy->set_cast_shadows(false);
     lightDummy->set_name("LightDummy");
     light->add_child(lightDummy);
@@ -75,6 +75,8 @@ void HairViewer::setup()
                        "Pablo", Vec3{0.04f, 0.027f, 0.015f});
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply", RESOURCES_PATH "models/neural_head_ALVARO.ply",
                        "Alvaro", Vec3{0.21f, 0.13f, 0.067f});
+    load_neural_avatar(RESOURCES_PATH "models/neural_hair_TO�O.ply", RESOURCES_PATH "models/neural_head_TO�O.ply",
+        "Antonio", Vec3{ 0.3f, 0.21f, 0.1f });
 #else
     Mesh *hair = new Mesh();
     hair->load_file(MESH_PATH + "curly.hair", false);
@@ -101,13 +103,13 @@ void HairViewer::setup()
 m_scene->set_ambient_color({0.2, 0.2, 0.2});
 m_scene->set_ambient_intensity(0.0f);
 
-m_controller = new Controller(camera);
+m_controller = new Tools::Controller(camera, m_window);
 }
 
 void HairViewer::update()
 {
     if (!m_interface.overlay->wants_to_handle_input())
-        m_controller->handle_keyboard(m_window->get_handle(), 0, 0, m_time.delta);
+        m_controller->handle_keyboard( 0, 0, m_time.delta);
 
     // Rotate the vector around the ZX plane
     auto light = m_scene->get_lights()[0];
@@ -127,7 +129,7 @@ void HairViewer::update()
 
 void HairViewer::tick()
 {
-    float currentTime = (float)Window::get_time_elapsed();
+    float currentTime = (float)m_window->get_time_elapsed();
     m_time.delta = currentTime - m_time.last;
     m_time.last = currentTime;
     m_time.framesPerSecond = 1.0f / m_time.delta;
@@ -147,12 +149,12 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
    
     HairMaterial *hmat = new HairMaterial();
     hmat->set_base_color(hairColor);
-    hair->set_material(hmat);
+    hair->push_material(hmat);
     hair->set_name(std::string(objName) + " hair");
 
     const std::string HEAD_PATH(headFile);
     Mesh *head = new Mesh();
-    Loaders::load_3D_file(head, HEAD_PATH);
+    Tools::Loaders::load_3D_file(head, HEAD_PATH);
 
     //Transform
     head->set_position(position);
@@ -163,7 +165,7 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
     headMat->set_albedo(Vec3{0.21f, 0.18f, 0.085f});
     headMat->set_metalness(0.0f);
     headMat->set_roughness(0.4f);
-    head->set_material(headMat);
+    head->push_material(headMat);
     head->set_name(std::string(objName) + " head");
 
     head->add_child(hair);

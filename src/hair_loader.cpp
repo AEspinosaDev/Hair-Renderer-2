@@ -150,7 +150,7 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
         Core::Geometry *g = new Core::Geometry();
         g->fill(vertices, indices);
         // augmentDensity(g, 80000);
-        mesh->set_geometry(g);
+        mesh->push_geometry(g);
         mesh->setup_volume();
 
         return;
