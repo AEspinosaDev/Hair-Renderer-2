@@ -75,7 +75,7 @@ void HairViewer::setup()
                        "Pablo", Vec3{0.04f, 0.027f, 0.015f});
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply", RESOURCES_PATH "models/neural_head_ALVARO.ply",
                        "Alvaro", Vec3{0.21f, 0.13f, 0.067f});
-    load_neural_avatar(RESOURCES_PATH "models/neural_hair_TO�O.ply", RESOURCES_PATH "models/neural_head_TO�O.ply",
+    load_neural_avatar(RESOURCES_PATH "models/neural_hair_TONO.ply", RESOURCES_PATH "models/neural_head_TONO.ply",
         "Antonio", Vec3{ 0.3f, 0.21f, 0.1f });
 #else
     Mesh *hair = new Mesh();
