@@ -21,7 +21,7 @@ void HairViewer::init(Systems::RendererSettings settings)
     setup();
 
     m_interface.init(m_window, m_scene, m_renderer);
-    //m_renderer->set_gui_overlay(m_interface.overlay);
+    // m_renderer->set_gui_overlay(m_interface.overlay);
 }
 
 void HairViewer::run(Systems::RendererSettings settings)
@@ -76,7 +76,7 @@ void HairViewer::setup()
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply", RESOURCES_PATH "models/neural_head_ALVARO.ply",
                        "Alvaro", Vec3{0.21f, 0.13f, 0.067f});
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_TONO.ply", RESOURCES_PATH "models/neural_head_TONO.ply",
-        "Antonio", Vec3{ 0.3f, 0.21f, 0.1f });
+                       "Antonio", Vec3{0.3f, 0.21f, 0.1f});
 #else
     Mesh *hair = new Mesh();
     hair->load_file(MESH_PATH + "curly.hair", false);
@@ -100,16 +100,21 @@ void HairViewer::setup()
     m_scene->add(head);
 #endif
 
-m_scene->set_ambient_color({0.2, 0.2, 0.2});
-m_scene->set_ambient_intensity(0.0f);
+    m_scene->set_ambient_color({0.2, 0.2, 0.2});
+    m_scene->set_ambient_intensity(0.0f);
 
-m_controller = new Tools::Controller(camera, m_window);
+    TextureHDR *envMap = new TextureHDR();
+    Tools::Loaders::load_HDRi(envMap, TEXTURE_PATH + "room.hdr");
+    Skybox *sky = new Skybox(envMap);
+    m_scene->add(sky);
+
+    m_controller = new Tools::Controller(camera, m_window);
 }
 
 void HairViewer::update()
 {
     if (!m_interface.overlay->wants_to_handle_input())
-        m_controller->handle_keyboard( 0, 0, m_time.delta);
+        m_controller->handle_keyboard(0, 0, m_time.delta);
 
     // Rotate the vector around the ZX plane
     auto light = m_scene->get_lights()[0];
@@ -139,14 +144,14 @@ void HairViewer::tick()
     m_interface.overlay->render();
     m_renderer->render(m_scene);
 }
-void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, const char *objName, Vec3 hairColor, Vec3 position)
+void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, const char *objName, Vec3 hairColor,
+                                    Vec3 position)
 {
 
     Mesh *hair = new Mesh();
     std::thread loadThread1(hair_loaders::load_neural_hair, hair, hairFile, nullptr, true, false, false, false);
     loadThread1.detach();
-    
-   
+
     HairMaterial *hmat = new HairMaterial();
     hmat->set_base_color(hairColor);
     hair->push_material(hmat);
@@ -156,7 +161,7 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
     Mesh *head = new Mesh();
     Tools::Loaders::load_3D_file(head, HEAD_PATH);
 
-    //Transform
+    // Transform
     head->set_position(position);
     head->set_scale(3.f);
     head->set_rotation({-90.0, 0.0f, 215.0f}); // Correct blender axis
