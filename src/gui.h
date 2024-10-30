@@ -14,5 +14,5 @@ struct UserInterface
     Tools::SceneExplorerWidget *sceneWidget{nullptr};
     Tools::ObjectExplorerWidget *objectWidget{nullptr};
 
-    void init(Core::WindowBase* window, Core::Scene* scene, Systems::RendererBase* renderer);
+    void init(Core::IWindow* window, Core::Scene* scene, Systems::BaseRenderer* renderer);
 };

@@ -141,8 +141,8 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
                 }
                 else
                 {
+                    vertices.back().tangent = Vec3(0.0);
                     color = {((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX};
-                    // rootsIndices.push_back(i + 1);
                 }
             }
         }

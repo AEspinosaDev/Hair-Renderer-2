@@ -46,7 +46,7 @@ void HairViewer::setup()
     const std::string ENGINE_MESH_PATH(ENGINE_RESOURCES_PATH "meshes/");
 
     camera = new Camera();
-    camera->set_position(Vec3(0.0f, 0.0f, -7.0f));
+    camera->set_position(Vec3(0.0f, 0.0f, -11.0f));
     camera->set_far(100.0f);
     camera->set_near(0.1f);
     camera->set_field_of_view(70.0f);
@@ -54,8 +54,8 @@ void HairViewer::setup()
     m_scene = new Scene(camera);
 
     PointLight *light = new PointLight();
-    light->set_position({-6.0f, 6.0f, 0.0f});
-    light->set_shadow_fov(90.0f);
+    light->set_position({-6.0f, 8.0f, 0.0f});
+    light->set_shadow_fov(120.0f);
     light->set_shadow_bias(0.00005f);
     light->set_shadow_near(0.1f);
     light->set_area_of_effect(30.0f);
@@ -72,11 +72,11 @@ void HairViewer::setup()
 
 #ifdef USE_NEURAL_MODELS
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_PABLO.ply", RESOURCES_PATH "models/neural_head_PABLO.ply",
-                       "Pablo", Vec3{0.04f, 0.027f, 0.015f});
+                       "Pablo", {1, 1, 1}, Vec3(0.0), -175.0f);
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply", RESOURCES_PATH "models/neural_head_ALVARO.ply",
-                       "Alvaro", Vec3{0.21f, 0.13f, 0.067f});
+                       "Alvaro", {9, 6, 4}, {-5.5f, 0.1f, -0.4f}, -35.0f);
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_TONO.ply", RESOURCES_PATH "models/neural_head_TONO.ply",
-                       "Antonio", Vec3{0.3f, 0.21f, 0.1f});
+                       "Antonio", {9, 6, 3},{5.5f, 0.0f, 0.0f}, -320.0f);
 #else
     Mesh *hair = new Mesh();
     hair->load_file(MESH_PATH + "curly.hair", false);
@@ -101,12 +101,15 @@ void HairViewer::setup()
 #endif
 
     m_scene->set_ambient_color({0.2, 0.2, 0.2});
-    m_scene->set_ambient_intensity(0.0f);
+    m_scene->set_ambient_intensity(0.1f);
 
     TextureHDR *envMap = new TextureHDR();
     Tools::Loaders::load_HDRi(envMap, TEXTURE_PATH + "room.hdr");
     Skybox *sky = new Skybox(envMap);
-    m_scene->add(sky);
+    sky->set_color_intensity(0.1);
+    m_scene->set_skybox(sky);
+
+    m_scene->enable_fog(false);
 
     m_controller = new Tools::Controller(camera, m_window);
 }
@@ -144,8 +147,8 @@ void HairViewer::tick()
     m_interface.overlay->render();
     m_renderer->render(m_scene);
 }
-void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, const char *objName, Vec3 hairColor,
-                                    Vec3 position)
+void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, const char *objName,
+                                    math::ivec3 hairColor, Vec3 position, float rotation)
 {
 
     Mesh *hair = new Mesh();
@@ -153,7 +156,7 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
     loadThread1.detach();
 
     HairMaterial *hmat = new HairMaterial();
-    hmat->set_base_color(hairColor);
+    hmat->set_base_color(Vec3(hairColor) / 255.0f);
     hair->push_material(hmat);
     hair->set_name(std::string(objName) + " hair");
 
@@ -164,12 +167,12 @@ void HairViewer::load_neural_avatar(const char *hairFile, const char *headFile, 
     // Transform
     head->set_position(position);
     head->set_scale(3.f);
-    head->set_rotation({-90.0, 0.0f, 215.0f}); // Correct blender axis
+    head->set_rotation({-90.0, 0.0f, 215.0f + rotation}); // Correct blender axis
 
     auto headMat = new PhysicallyBasedMaterial();
-    headMat->set_albedo(Vec3{0.21f, 0.18f, 0.085f});
+    headMat->set_albedo(Vec3{0.12f, 0.12f, 0.12f});
     headMat->set_metalness(0.0f);
-    headMat->set_roughness(0.4f);
+    headMat->set_roughness(0.55f);
     head->push_material(headMat);
     head->set_name(std::string(objName) + " head");
 

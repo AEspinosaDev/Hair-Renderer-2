@@ -20,8 +20,8 @@ class HairViewer
    
     UserInterface m_interface{};
 
-    Core::WindowBase *m_window;
-    Systems::RendererBase *m_renderer;
+    Core::IWindow *m_window;
+    Systems::BaseRenderer *m_renderer;
     Scene *m_scene;
     Camera *camera;
     Tools::Controller *m_controller;
@@ -43,7 +43,7 @@ public:
     void run(Systems::RendererSettings settings);
 
 private:
-    void load_neural_avatar(const char* hairFile, const char* headFile, const char* objName, Vec3 hairColor, Vec3 position = Vec3(0.0f));
+    void load_neural_avatar(const char* hairFile, const char* headFile, const char* objName, math::ivec3 hairColor, Vec3 position = Vec3(0.0f), float rotation = 0.0f);
 
     void setup();
 
