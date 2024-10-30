@@ -76,26 +76,26 @@ void HairViewer::setup()
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply", RESOURCES_PATH "models/neural_head_ALVARO.ply",
                        "Alvaro", {9, 6, 4}, {-5.5f, 0.1f, -0.4f}, -35.0f);
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_TONO.ply", RESOURCES_PATH "models/neural_head_TONO.ply",
-                       "Antonio", {9, 6, 3},{5.5f, 0.0f, 0.0f}, -320.0f);
+                       "Antonio", {9, 6, 3}, {5.5f, 0.0f, 0.0f}, -320.0f);
 #else
     Mesh *hair = new Mesh();
-    hair->load_file(MESH_PATH + "curly.hair", false);
+    Tools::Loaders::load_3D_file(hair, MESH_PATH + "curly.hair");
     hair->set_scale(0.053f);
     hair->set_rotation({-90.0, 0.0f, 90.0f});
     HairMaterial *hmat = new HairMaterial();
-    hmat->set_base_color(Vec3{0.21f, 0.13f, 0.067f});
-    hair->set_material(hmat);
+    hmat->set_base_color(Vec3(4.0f, 1.0f, 1.0f)/255.0f);
+    hair->push_material(hmat);
     hair->set_name("Hair");
     m_scene->add(hair);
 
     Mesh *head = new Mesh();
-    head->load_file(MESH_PATH + "woman.ply");
+    Tools::Loaders::load_3D_file(head, MESH_PATH + "woman.ply");
     head->set_rotation({0.0, 270.0f, 180.0f});
     auto headMat = new PhysicallyBasedMaterial();
-    headMat->set_albedo(Vec3{0.21f, 0.18f, 0.085f});
+    headMat->set_albedo(Vec3(113.0f, 82.0f, 55.0f)/255.0f);
     headMat->set_metalness(0.0f);
     headMat->set_roughness(0.4f);
-    head->set_material(headMat);
+    head->push_material(headMat);
     head->set_name("Head");
     m_scene->add(head);
 #endif
@@ -104,6 +104,7 @@ void HairViewer::setup()
     m_scene->set_ambient_intensity(0.1f);
 
     TextureHDR *envMap = new TextureHDR();
+    // Tools::Loaders::load_texture(envMap, TEXTURE_PATH + "room.hdr");
     Tools::Loaders::load_HDRi(envMap, TEXTURE_PATH + "room.hdr");
     Skybox *sky = new Skybox(envMap);
     sky->set_color_intensity(0.1);
