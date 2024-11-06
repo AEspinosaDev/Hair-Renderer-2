@@ -1,19 +1,22 @@
 #include "hair_loader.h"
 
-void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName, Core::Mesh *const skullMesh, bool preload,
-                                    bool verbose, bool calculateTangents, bool saveOutput)
-{
+void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
+                                    const char*       fileName,
+                                    Core::Mesh* const skullMesh,
+                                    bool              preload,
+                                    bool              verbose,
+                                    bool              calculateTangents,
+                                    bool              saveOutput) {
     std::unique_ptr<std::istream> file_stream;
-    std::vector<uint8_t> byte_buffer;
-    std::string filePath = fileName;
+    std::vector<uint8_t>          byte_buffer;
+    std::string                   filePath = fileName;
     try
     {
         if (preload)
         {
-            byte_buffer = Graphics::utils::read_file_binary(filePath);
-            file_stream.reset(new Graphics::utils::memory_stream((char *)byte_buffer.data(), byte_buffer.size()));
-        }
-        else
+            byte_buffer = Graphics::Utils::read_file_binary(filePath);
+            file_stream.reset(new Graphics::Utils::memory_stream((char*)byte_buffer.data(), byte_buffer.size()));
+        } else
         {
             file_stream.reset(new std::ifstream(filePath, std::ios::binary));
         }
@@ -31,15 +34,15 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
         if (verbose)
         {
             std::cout << "\t[ply_header] Type: " << (file.is_binary_file() ? "binary" : "ascii") << std::endl;
-            for (const auto &c : file.get_comments())
+            for (const auto& c : file.get_comments())
                 std::cout << "\t[ply_header] Comment: " << c << std::endl;
-            for (const auto &c : file.get_info())
+            for (const auto& c : file.get_info())
                 std::cout << "\t[ply_header] Info: " << c << std::endl;
 
-            for (const auto &e : file.get_elements())
+            for (const auto& e : file.get_elements())
             {
                 std::cout << "\t[ply_header] element: " << e.name << " (" << e.size << ")" << std::endl;
-                for (const auto &p : e.properties)
+                for (const auto& p : e.properties)
                 {
                     std::cout << "\t[ply_header] \tproperty: " << p.name
                               << " (type=" << tinyply::PropertyTable[p.propertyType].str << ")";
@@ -55,19 +58,13 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
         // // known to exist in the header prior to reading the data. For brevity of this sample, properties
         // // like vertex position are hard-coded:
         try
-        {
-            positions = file.request_properties_from_element("vertex", {"x", "y", "z"});
-        }
-        catch (const std::exception &e)
-        {
-            std::cerr << "tinyply exception: " << e.what() << std::endl;
-        }
+        { positions = file.request_properties_from_element("vertex", {"x", "y", "z"}); } catch (const std::exception& e)
+        { std::cerr << "tinyply exception: " << e.what() << std::endl; }
 
         try
         {
             normals = file.request_properties_from_element("vertex", {"nx", "ny", "nz"});
-        }
-        catch (const std::exception &e)
+        } catch (const std::exception& e)
         {
             if (verbose)
                 std::cerr << "tinyply exception: " << e.what() << std::endl;
@@ -75,14 +72,13 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
         try
         {
             normals = file.request_properties_from_element("vertex", {"normal_x", "normal_y", "normal_z"});
-        }
-        catch (const std::exception &e)
+        } catch (const std::exception& e)
         {
             if (verbose)
                 std::cerr << "tinyply exception: " << e.what() << std::endl;
         }
 
-        Graphics::utils::ManualTimer readTimer;
+        Graphics::Utils::ManualTimer readTimer;
         readTimer.start();
         file.read(*file_stream);
         readTimer.stop();
@@ -99,7 +95,7 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
                 std::cout << "\tRead " << normals->count << " total vertex normals " << std::endl;
         }
 
-        std::vector<Graphics::utils::Vertex> vertices;
+        std::vector<Graphics::Utils::Vertex> vertices;
         vertices.reserve(positions->count);
         std::vector<unsigned int> indices;
         // std::vector<unsigned int> rootsIndices;
@@ -107,25 +103,25 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
         if (positions)
         {
             // rootsIndices.push_back(0); // First index is certainly a root
-            const float *posData = reinterpret_cast<const float *>(positions->buffer.get());
-            const float *normData = reinterpret_cast<const float *>(normals->buffer.get());
-            glm::vec3 color = {((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX};
+            const float* posData  = reinterpret_cast<const float*>(positions->buffer.get());
+            const float* normData = reinterpret_cast<const float*>(normals->buffer.get());
+            glm::vec3    color = {((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX};
             for (size_t i = 0; i < positions->count - 1; i++)
             {
-                float x = posData[i * 3];
-                float y = posData[i * 3 + 1];
-                float z = posData[i * 3 + 2];
+                float     x   = posData[i * 3];
+                float     y   = posData[i * 3 + 1];
+                float     z   = posData[i * 3 + 2];
                 glm::vec3 pos = {x, y, z};
 
-                float nx = normData[i * 3];
-                float ny = normData[i * 3 + 1];
-                float nz = normData[i * 3 + 2];
+                float     nx     = normData[i * 3];
+                float     ny     = normData[i * 3 + 1];
+                float     nz     = normData[i * 3 + 2];
                 glm::vec3 normal = {nx, ny, nz};
 
                 // Generate hair tangents
-                float nextX = posData[(i + 1) * 3];
-                float nextY = posData[(i + 1) * 3 + 1];
-                float nextZ = posData[(i + 1) * 3 + 2];
+                float     nextX   = posData[(i + 1) * 3];
+                float     nextY   = posData[(i + 1) * 3 + 1];
+                float     nextZ   = posData[(i + 1) * 3 + 2];
                 glm::vec3 nextPos = {nextX, nextY, nextZ};
                 glm::vec3 tangent = glm::normalize(nextPos - pos);
 
@@ -138,8 +134,7 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
                 {
                     indices.push_back(i);
                     indices.push_back(i + 1);
-                }
-                else
+                } else
                 {
                     vertices.back().tangent = Vec3(0.0);
                     color = {((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX};
@@ -147,16 +142,13 @@ void hair_loaders::load_neural_hair(Core::Mesh *const mesh, const char *fileName
             }
         }
 
-        Core::Geometry *g = new Core::Geometry();
+        Core::Geometry* g = new Core::Geometry();
         g->fill(vertices, indices);
         // augmentDensity(g, 80000);
         mesh->push_geometry(g);
         mesh->setup_volume();
 
         return;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Caught tinyply exception: " << e.what() << std::endl;
-    }
+    } catch (const std::exception& e)
+    { std::cerr << "Caught tinyply exception: " << e.what() << std::endl; }
 }

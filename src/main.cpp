@@ -1,16 +1,15 @@
 #include "application.h"
 #include <iostream>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
 
     HairViewer app;
     try
     {
         Systems::RendererSettings settings{};
         settings.samplesMSAA = MSAASamples::MSAA_x8;
-        settings.clearColor = Vec4(0.02, 0.02, 0.02, 1.0);
-        settings.enableUI = true;
+        settings.clearColor  = Vec4(0.02, 0.02, 0.02, 1.0);
+        settings.enableUI    = true;
         // settings.renderingType = RendererType::TFORWARD;
         // settings.shadowResolution = ShadowResolution::MEDIUM;
 
@@ -48,8 +47,7 @@ int main(int argc, char *argv[])
                 std::cerr << "[forward]" << std::endl;
                 std::cerr << "[deferred]" << std::endl;
                 return EXIT_FAILURE;
-            }
-            else if (token == "-aa")
+            } else if (token == "-aa")
             {
                 if (i + 1 >= argc)
                 {
@@ -72,8 +70,7 @@ int main(int argc, char *argv[])
 
                 i++;
                 continue;
-            }
-            else if (token == "-gui")
+            } else if (token == "-gui")
             {
                 if (i + 1 >= argc)
                 {
@@ -94,8 +91,7 @@ int main(int argc, char *argv[])
         }
 
         app.run(settings);
-    }
-    catch (const std::exception &e)
+    } catch (const std::exception& e)
     {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
