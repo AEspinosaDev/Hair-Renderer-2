@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
     try
     {
         Systems::RendererSettings settings{};
-        settings.samplesMSAA = MSAASamples::MSAA_x8;
+        settings.samplesMSAA = MSAASamples::x8;
         settings.clearColor  = Vec4(0.02, 0.02, 0.02, 1.0);
         settings.enableUI    = true;
         // settings.renderingType = RendererType::TFORWARD;
@@ -60,11 +60,11 @@ int main(int argc, char* argv[]) {
                 }
                 std::string aaType(argv[i + 1]);
                 if (aaType == "none")
-                    settings.samplesMSAA = MSAASamples::_NONE;
+                    settings.samplesMSAA = MSAASamples::x1;
                 if (aaType == "msaa4")
-                    settings.samplesMSAA = MSAASamples::MSAA_x4;
+                    settings.samplesMSAA = MSAASamples::x4;
                 if (aaType == "msaa8")
-                    settings.samplesMSAA = MSAASamples::MSAA_x8;
+                    settings.samplesMSAA = MSAASamples::x8;
                 // if (aaType == "fxaa"){}
                 //     settings.AAtype = AntialiasingType::FXAA;
 

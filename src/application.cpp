@@ -19,7 +19,7 @@ void HairViewer::init(Systems::RendererSettings settings) {
                                          std::placeholders::_3,
                                          std::placeholders::_4));
 
-    m_renderer = new Systems::ForwardRenderer(m_window, settings, {HIGH, false});
+    m_renderer = new Systems::ForwardRenderer(m_window, settings, {ShadowResolution::HIGH, false});
 
     setup();
 
@@ -57,7 +57,7 @@ void HairViewer::setup() {
     PointLight* light = new PointLight();
     light->set_position({-6.0f, 8.0f, 0.0f});
     light->set_shadow_fov(120.0f);
-    light->set_shadow_bias(0.00005f);
+    light->set_shadow_bias(0.0002f);
     light->set_shadow_near(0.1f);
     light->set_area_of_effect(30.0f);
     light->set_name("PointLight");
@@ -65,7 +65,7 @@ void HairViewer::setup() {
     Mesh* lightDummy = new Mesh();
     Tools::Loaders::load_3D_file(lightDummy, ENGINE_MESH_PATH + "sphere.obj", false);
     lightDummy->push_material(new UnlitMaterial());
-    lightDummy->set_cast_shadows(false);
+    lightDummy->cast_shadows(false);
     lightDummy->set_name("LightDummy");
     light->add_child(lightDummy);
 

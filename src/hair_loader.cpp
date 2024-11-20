@@ -95,8 +95,10 @@ void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
                 std::cout << "\tRead " << normals->count << " total vertex normals " << std::endl;
         }
 
-        std::vector<Graphics::Utils::Vertex> vertices;
+        std::vector<Graphics::Vertex> vertices;
+        std::vector<Graphics::Voxel>  voxels;
         vertices.reserve(positions->count);
+        voxels.reserve(positions->count);
         std::vector<unsigned int> indices;
         // std::vector<unsigned int> rootsIndices;
 
@@ -128,25 +130,31 @@ void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
                 vertices.push_back({pos, normal, tangent, {0.0f, 0.0f}, color});
                 if (i == positions->count - 2)
                     vertices.push_back({nextPos, normal, tangent, {0.0f, 0.0f}, color});
+                if (voxels.size() < 800)
+                    voxels.push_back({pos, 0.01f});
 
                 // Change STRAND
                 if ((i + 1) % 100 != 0)
                 {
+
                     indices.push_back(i);
                     indices.push_back(i + 1);
                 } else
                 {
+                    // voxels.push_back(Graphics::Voxel(pos, 0.05f));
                     vertices.back().tangent = Vec3(0.0);
                     color = {((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX, ((float)rand()) / RAND_MAX};
                 }
             }
         }
-
+      
         Core::Geometry* g = new Core::Geometry();
         g->fill(vertices, indices);
-        // augmentDensity(g, 80000);
+        g->fill_voxel_array(voxels);
+        g->create_voxel_AS(true);
         mesh->push_geometry(g);
         mesh->setup_volume();
+        // mesh->ray_hittable(false);
 
         return;
     } catch (const std::exception& e)
