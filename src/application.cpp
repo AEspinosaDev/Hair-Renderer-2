@@ -72,23 +72,24 @@ void HairViewer::setup() {
     m_scene->add(light);
 
 #ifdef USE_NEURAL_MODELS
-    load_neural_avatar(RESOURCES_PATH "models/neural_hair_PABLO.ply",
-                       RESOURCES_PATH "models/neural_head_PABLO.ply",
-                       "Pablo",
-                       {1, 1, 1},
-                       Vec3(0.0),
-                       -175.0f);
-    load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply",
-                       RESOURCES_PATH "models/neural_head_ALVARO.ply",
-                       "Alvaro",
-                       {9, 6, 4},
-                       {-5.5f, 0.1f, -0.4f},
-                       -35.0f);
+    // load_neural_avatar(RESOURCES_PATH "models/neural_hair_PABLO.ply",
+    //                    RESOURCES_PATH "models/neural_head_PABLO.ply",
+    //                    "Pablo",
+    //                    {1, 1, 1},
+    //                    Vec3(0.0),
+    //                    -175.0f);
+    // load_neural_avatar(RESOURCES_PATH "models/neural_hair_ALVARO.ply",
+    //                    RESOURCES_PATH "models/neural_head_ALVARO.ply",
+    //                    "Alvaro",
+    //                    {9, 6, 4},
+    //                    {-5.5f, 0.1f, -0.4f},
+    //                    -35.0f);
     load_neural_avatar(RESOURCES_PATH "models/neural_hair_TONO.ply",
                        RESOURCES_PATH "models/neural_head_TONO.ply",
                        "Antonio",
                        {24, 4, 24},
-                       {5.5f, 0.0f, 0.0f},
+                    //    {5.5f, 0.0f, 0.0f},
+                       {0.0f, 0.0f, 0.0f},
                        -320.0f);
     //    {9, 6, 3}
 #else
@@ -96,7 +97,7 @@ void HairViewer::setup() {
     Tools::Loaders::load_3D_file(hair, MESH_PATH + "straight.hair", false);
     hair->set_scale(0.053f);
     hair->set_rotation({-90.0, 0.0f, 90.0f});
-    HairStrandMaterial2* hmat = new HairStrandMaterial2();
+    HairStrandMaterial2* hmat = new HairStrandMaterial2(BRUNNETTE);
     hmat->set_base_color(Vec3(4.0f, 1.0f, 1.0f) / 255.0f);
     hair->push_material(hmat);
     hair->set_name("Hair");
@@ -114,7 +115,7 @@ void HairViewer::setup() {
     m_scene->add(head);
 #endif
 
-    m_scene->set_ambient_color({0.2, 0.2, 0.2});
+    m_scene->set_ambient_color({0.05, 0.05, 0.05});
     m_scene->set_ambient_intensity(0.1f);
 
     TextureHDR* envMap = new TextureHDR();
