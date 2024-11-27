@@ -95,6 +95,7 @@ void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
                 std::cout << "\tRead " << normals->count << " total vertex normals " << std::endl;
         }
 
+        // positions->count = 1000000;
         std::vector<Graphics::Vertex> vertices;
         std::vector<Graphics::Voxel>  voxels;
         vertices.reserve(positions->count);
@@ -130,8 +131,8 @@ void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
                 vertices.push_back({pos, normal, tangent, {0.0f, 0.0f}, color});
                 if (i == positions->count - 2)
                     vertices.push_back({nextPos, normal, tangent, {0.0f, 0.0f}, color});
-                if (voxels.size() < 800)
-                    voxels.push_back({pos, 0.01f});
+
+                voxels.push_back({pos, 0.01f});
 
                 // Change STRAND
                 if ((i + 1) % 100 != 0)
@@ -147,7 +148,7 @@ void hair_loaders::load_neural_hair(Core::Mesh* const mesh,
                 }
             }
         }
-      
+
         Core::Geometry* g = new Core::Geometry();
         g->fill(vertices, indices);
         g->fill_voxel_array(voxels);

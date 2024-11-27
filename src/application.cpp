@@ -94,7 +94,7 @@ void HairViewer::setup() {
     //    {9, 6, 3}
 #else
     Mesh* hair = new Mesh();
-    Tools::Loaders::load_3D_file(hair, MESH_PATH + "straight.hair", false);
+    Tools::Loaders::load_3D_file(hair, MESH_PATH + "curly.hair", false);
     hair->set_scale(0.053f);
     hair->set_rotation({-90.0, 0.0f, 90.0f});
     HairStrandMaterial2* hmat = new HairStrandMaterial2(BRUNNETTE);
@@ -179,7 +179,7 @@ void HairViewer::load_neural_avatar(const char* hairFile,
 
     const std::string HEAD_PATH(headFile);
     Mesh*             head = new Mesh();
-    Tools::Loaders::load_3D_file(head, HEAD_PATH);
+    Tools::Loaders::load_3D_file(head, HEAD_PATH,true);
 
     // Transform
     head->set_position(position);
