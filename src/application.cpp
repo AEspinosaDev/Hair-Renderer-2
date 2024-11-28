@@ -128,7 +128,7 @@ void HairViewer::setup() {
 
     m_scene->enable_fog(false);
 
-    m_controller = new Tools::Controller(camera, m_window);
+    m_controller = new Tools::Controller(camera, m_window,ControllerMovementType::ORBITAL);
 }
 
 void HairViewer::update() {
