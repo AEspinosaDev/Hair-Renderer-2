@@ -7,6 +7,7 @@ void HairViewer::init(Systems::RendererSettings settings) {
     m_window = new WindowGLFW("Hair Viewer", 1280, 1024);
 
     m_window->init();
+    m_window->set_window_icon(RESOURCES_PATH "textures/icon.png");
 
     m_window->set_window_size_callback(
         std::bind(&HairViewer::window_resize_callback, this, std::placeholders::_1, std::placeholders::_2));
@@ -19,7 +20,7 @@ void HairViewer::init(Systems::RendererSettings settings) {
                                          std::placeholders::_3,
                                          std::placeholders::_4));
 
-    m_renderer = new Systems::ForwardRenderer(m_window, settings, {ShadowResolution::HIGH, false});
+    m_renderer = new Systems::ForwardRenderer(m_window, false, ShadowResolution::HIGH, settings);
 
     setup();
 
@@ -88,7 +89,7 @@ void HairViewer::setup() {
                        RESOURCES_PATH "models/neural_head_TONO.ply",
                        "Antonio",
                        {24, 4, 24},
-                    //    {5.5f, 0.0f, 0.0f},
+                       //    {5.5f, 0.0f, 0.0f},
                        {0.0f, 0.0f, 0.0f},
                        -320.0f);
     //    {9, 6, 3}
