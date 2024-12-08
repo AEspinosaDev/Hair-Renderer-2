@@ -20,7 +20,7 @@ void HairViewer::init(Systems::RendererSettings settings) {
                                          std::placeholders::_3,
                                          std::placeholders::_4));
 
-    m_renderer = new Systems::ForwardRenderer(m_window, false, ShadowResolution::HIGH, settings);
+    m_renderer = new Systems::ForwardRenderer(m_window, ShadowResolution::HIGH, settings);
 
     setup();
 

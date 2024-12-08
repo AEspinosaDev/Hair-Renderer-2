@@ -9,7 +9,7 @@ void UserInterface::init(Core::IWindow* window, Core::Scene* scene, Systems::Bas
     sceneWidget                 = new Tools::SceneExplorerWidget(scene);
     explorerPanel->add_child(sceneWidget);
     explorerPanel->add_child(new Tools::Space());
-    explorerPanel->add_child(new Tools::RendererSettingsWidget(renderer));
+    explorerPanel->add_child(new Tools::ForwardRendererWidget(static_cast<Systems::ForwardRenderer*>(renderer)));
     explorerPanel->add_child(new Tools::Separator());
     explorerPanel->add_child(new Tools::TextLine(" Application average"));
     explorerPanel->add_child(new Tools::Profiler());
