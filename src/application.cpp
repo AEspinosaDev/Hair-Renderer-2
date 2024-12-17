@@ -58,6 +58,7 @@ void HairViewer::setup() {
     PointLight* light = new PointLight();
     light->set_position({-6.0f, 8.0f, 0.0f});
     light->set_shadow_fov(120.0f);
+    light->set_intensity(1.2f);
     light->set_shadow_bias(0.0002f);
     light->set_shadow_near(0.1f);
     light->set_area_of_effect(30.0f);
@@ -128,7 +129,7 @@ void HairViewer::setup() {
 
     m_scene->enable_fog(false);
 
-    m_controller = new Tools::Controller(camera, m_window,ControllerMovementType::ORBITAL);
+    m_controller = new Tools::Controller(camera, m_window, ControllerMovementType::ORBITAL);
 }
 
 void HairViewer::update() {
@@ -188,7 +189,7 @@ void HairViewer::load_neural_avatar(const char* hairFile,
     head->set_rotation({-90.0, 0.0f, 215.0f + rotation}); // Correct blender axis
 
     auto headMat = new PhysicallyBasedMaterial();
-    headMat->set_albedo(Vec3{0.12f, 0.12f, 0.12f});
+    headMat->set_albedo(Vec3(204.0f, 123.0f, 85.0f) / 255.0f);
     headMat->set_metalness(0.0f);
     headMat->set_roughness(0.55f);
     head->push_material(headMat);
