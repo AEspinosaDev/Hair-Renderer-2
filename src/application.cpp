@@ -1,7 +1,7 @@
 #include "application.h"
 #include <filesystem>
 
-#define USE_NEURAL_MODELS
+// #define USE_NEURAL_MODELS
 
 void HairViewer::init(Systems::RendererSettings settings) {
     m_window = new WindowGLFW("Hair Viewer", 1280, 1024);
@@ -96,7 +96,7 @@ void HairViewer::setup() {
     //    {9, 6, 3}
 #else
     Mesh* hair = new Mesh();
-    Tools::Loaders::load_3D_file(hair, MESH_PATH + "straight.hair", false);
+    Tools::Loaders::load_3D_file(hair, MESH_PATH + "wavy.hair", false);
     hair->set_scale(0.053f);
     hair->set_rotation({-90.0, 0.0f, 90.0f});
     HairStrandMaterial2* hmat = new HairStrandMaterial2(BRUNNETTE);
@@ -108,10 +108,13 @@ void HairViewer::setup() {
     Mesh* head = new Mesh();
     Tools::Loaders::load_3D_file(head, MESH_PATH + "woman.ply");
     head->set_rotation({0.0, 270.0f, 180.0f});
-    auto headMat = new PhysicallyBasedMaterial();
-    headMat->set_albedo(Vec3(113.0f, 82.0f, 55.0f) / 255.0f);
+    auto     headMat    = new PhysicallyBasedMaterial();
+    Texture* headAlbedo = new Texture();
+    Tools::Loaders::load_texture(headAlbedo, TEXTURE_PATH + "head.png");
+    headMat->set_albedo_texture(headAlbedo);
+    headMat->set_albedo(Vec3(204.0f, 123.0f, 85.0f)  / 255.0f);
     headMat->set_metalness(0.0f);
-    headMat->set_roughness(0.4f);
+    headMat->set_roughness(0.5f);
     head->push_material(headMat);
     head->set_name("Head");
     m_scene->add(head);
@@ -121,7 +124,6 @@ void HairViewer::setup() {
     m_scene->set_ambient_intensity(0.1f);
 
     TextureHDR* envMap = new TextureHDR();
-    // Tools::Loaders::load_texture(envMap, TEXTURE_PATH + "room.hdr");
     Tools::Loaders::load_HDRi(envMap, TEXTURE_PATH + "room.hdr");
     Skybox* sky = new Skybox(envMap);
     sky->set_color_intensity(0.1);
@@ -146,7 +148,7 @@ void HairViewer::update() {
 
         light->set_position({_x, light->get_position().y, _z});
         static_cast<UnlitMaterial*>(static_cast<Mesh*>(light->get_children().front())->get_material(0))
-            ->set_color({light->get_color(), 1.0f});
+            ->set_color({light->get_color()*4.0f, 1.0f});
     }
 
     m_interface.objectWidget->set_object(m_interface.sceneWidget->get_selected_object());
