@@ -98,15 +98,14 @@ void HairViewer::setup() {
     Mesh* hair = new Mesh();
     Tools::Loaders::load_3D_file(hair, MESH_PATH + "wavy.hair", false);
     hair->set_scale(0.053f);
-    hair->set_rotation({-90.0, 0.0f, 90.0f});
+    hair->set_rotation({90.0, 0.0f, 0.0f});
     HairStrandMaterial2* hmat = new HairStrandMaterial2(BRUNNETTE);
     hmat->set_base_color(Vec3(4.0f, 1.0f, 1.0f) / 255.0f);
     hair->push_material(hmat);
     hair->set_name("Hair");
-    m_scene->add(hair);
 
     Mesh* head = new Mesh();
-    Tools::Loaders::load_3D_file(head, MESH_PATH + "woman.ply");
+    Tools::Loaders::load_3D_file(head, MESH_PATH + "woman2.ply");
     head->set_rotation({0.0, 270.0f, 180.0f});
     auto     headMat    = new PhysicallyBasedMaterial();
     Texture* headAlbedo = new Texture();
@@ -117,6 +116,18 @@ void HairViewer::setup() {
     headMat->set_roughness(0.5f);
     head->push_material(headMat);
     head->set_name("Head");
+    Mesh* eyes = new Mesh();
+    Tools::Loaders::load_3D_file(eyes, MESH_PATH + "eyes.ply");
+    auto     eyesMat    = new PhysicallyBasedMaterial();
+    eyes->push_material(eyesMat);
+    Texture* eyesAlbedo = new Texture();
+    Tools::Loaders::load_texture(eyesAlbedo, TEXTURE_PATH + "eye.png");
+    eyesMat->set_albedo_texture(eyesAlbedo);
+    eyesMat->set_metalness(0.0f);
+    eyesMat->set_roughness(0.1f);
+    eyes->set_name("Eyes");
+    head->add_child(eyes);
+    head->add_child(hair);
     m_scene->add(head);
 #endif
 
