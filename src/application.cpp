@@ -48,17 +48,17 @@ void HairViewer::setup() {
     const std::string ENGINE_MESH_PATH(ENGINE_RESOURCES_PATH "meshes/");
 
     camera = new Camera();
-    camera->set_position(Vec3(0.0f, 0.0f, -11.0f));
+    camera->set_position(Vec3(0.0f, 0.0f, -16.0f));
     camera->set_far(100.0f);
     camera->set_near(0.1f);
-    camera->set_field_of_view(70.0f);
+    camera->set_field_of_view(40.0f);
 
     m_scene = new Scene(camera);
 
     PointLight* light = new PointLight();
-    light->set_position({-6.0f, 8.0f, 0.0f});
+    light->set_position({-1.3f, 8.0f, -5.8f});
     light->set_shadow_fov(120.0f);
-    light->set_intensity(1.2f);
+    light->set_intensity(1.0f);
     light->set_shadow_bias(0.0002f);
     light->set_shadow_near(0.1f);
     light->set_area_of_effect(30.0f);
@@ -99,19 +99,21 @@ void HairViewer::setup() {
     Tools::Loaders::load_3D_file(hair, MESH_PATH + "wavy.hair", false);
     hair->set_scale(0.053f);
     hair->set_rotation({90.0, 0.0f, 0.0f});
-    HairStrandMaterial2* hmat = new HairStrandMaterial2(BRUNNETTE);
+    HairStrandMaterial2* hmat = new HairStrandMaterial2();
     hmat->set_base_color(Vec3(4.0f, 1.0f, 1.0f) / 255.0f);
+    hmat->set_thickness(0.0025f);
     hair->push_material(hmat);
     hair->set_name("Hair");
 
     Mesh* head = new Mesh();
     Tools::Loaders::load_3D_file(head, MESH_PATH + "woman2.ply");
-    head->set_rotation({0.0, 270.0f, 180.0f});
+    head->set_rotation({0.0, 225.0f, 180.0f});
     auto     headMat    = new PhysicallyBasedMaterial();
     Texture* headAlbedo = new Texture();
     Tools::Loaders::load_texture(headAlbedo, TEXTURE_PATH + "head.png");
     headMat->set_albedo_texture(headAlbedo);
     headMat->set_albedo(Vec3(204.0f, 123.0f, 85.0f)  / 255.0f);
+    headMat->set_albedo_weight(0.75f);
     headMat->set_metalness(0.0f);
     headMat->set_roughness(0.5f);
     head->push_material(headMat);
@@ -132,13 +134,14 @@ void HairViewer::setup() {
 #endif
 
     m_scene->set_ambient_color({0.05, 0.05, 0.05});
-    m_scene->set_ambient_intensity(0.1f);
+    m_scene->set_ambient_intensity(0.05f);
 
     TextureHDR* envMap = new TextureHDR();
     Tools::Loaders::load_HDRi(envMap, TEXTURE_PATH + "room.hdr");
     Skybox* sky = new Skybox(envMap);
     sky->set_color_intensity(0.1);
     m_scene->set_skybox(sky);
+    m_scene->set_use_IBL(false);
 
     m_scene->enable_fog(false);
 
